@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% load static %}
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* Global Styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Fira Sans", Arial, sans-serif;
+      }
+
+      body {
+        display: flex;
+        height: 100vh;
+        background-color: #f9fafb;
+        flex-direction: row;
+      }
+
+      /* Navbar */
+      .navbar {
+        height: 60px;
+        background: #1f4e3b;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 10;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .navbar h1 {
+        font-size: 20px;
+        font-weight: 600;
+        color: #ffffff;
+        margin: 0;
+        letter-spacing: 0.5px;
+      }
+
+      /* Main Content Area */
+      .main-content {
+        padding: 25px;
+        flex-grow: 1;
+        background-color: #f9fafb;
+        padding-top: 80px;
+      }
+      .main-content h2 {
+        font-size: 22px;
+        font-weight: 600;
+        margin-bottom: 15px;
+        line-height: 1.4;
+        color: #1f4e3b;
+      }
+      .main-content p {
+        font-size: 16px;
+        line-height: 1.6;
+        color: #555;
+      }
+
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: #f0f0f0;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: #10b981;
+        border-radius: 5px;
+        transition: background 0.3s ease;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: #1e8e3d;
+      }
+
+      /* Responsive Design */
+      @media (max-width: 1024px) {
+        .main-content {
+          margin-left: 0;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .main-content {
+          margin-left: 0;
+        }
+      }
+
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <div class="navbar">
+      <h1>Intelligent Irrigation and Nutrient Management System</h1>
+    </div>
+
+    <!-- Sidebar -->
+    {% include 'sidebar.html' %}
+
+    <!-- Main Content -->
+    <div class="main-content" id="main-container">
+      <h2>Soil Moisture Visualization</h2>
+      <p>Select the options below to filter the data displayed in the graph:</p>
+
+      <!-- Search Filters Section -->
+      <div class="search-filters" style="margin-bottom: 20px">
+        <div class="form-row">
+          <div class="col-md-2">
+            <label for="region">Region</label>
+            <select id="region" class="form-control">
+              <option value="">Select Region</option>
+              <option value="region1">Region 1</option>
+              <option value="region2">Region 2</option>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <label for="hotspot">Hotspot</label>
+            <select id="hotspot" class="form-control">
+              <option value="">Select Hotspot</option>
+              <option value="hotspot1">Hotspot 1</option>
+              <option value="hotspot2">Hotspot 2</option>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <label for="aez">AEZ</label>
+            <select id="aez" class="form-control">
+              <option value="">Select AEZ</option>
+              <option value="aez1">AEZ 1</option>
+              <option value="aez2">AEZ 2</option>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <label for="nap">NAP</label>
+            <select id="nap" class="form-control">
+              <option value="">Select NAP</option>
+              <option value="nap1">NAP 1</option>
+              <option value="nap2">NAP 2</option>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <label for="division">Division</label>
+            <select id="division" class="form-control">
+              <option value="">Select Division</option>
+              <option value="division1">Division 1</option>
+              <option value="division2">Division 2</option>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <label for="district">District</label>
+            <select id="district" class="form-control">
+              <option value="">Select District</option>
+              <option value="district1">District 1</option>
+              <option value="district2">District 2</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="col-md-2">
+            <label for="subdistrict">Sub District</label>
+            <select id="subdistrict" class="form-control">
+              <option value="">Select Sub District</option>
+              <option value="subdistrict1">Sub District 1</option>
+              <option value="subdistrict2">Sub District 2</option>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <label for="union">Union</label>
+            <select id="union" class="form-control">
+              <option value="">Select Union</option>
+              <option value="union1">Union 1</option>
+              <option value="union2">Union 2</option>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <label for="block">Block</label>
+            <select id="block" class="form-control">
+              <option value="">Select Block</option>
+              <option value="block1">Block 1</option>
+              <option value="block2">Block 2</option>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <label for="village">Village</label>
+            <select id="village" class="form-control">
+              <option value="">Select Village</option>
+              <option value="village1">Village 1</option>
+              <option value="village2">Village 2</option>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <label for="device-id">Device ID</label>
+            <select id="device-id" class="form-control">
+              <option value="">Select Device ID</option>
+              <option value="device1">Device 1</option>
+              <option value="device2">Device 2</option>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <label for="field-name">Field Name</label>
+            <select id="field-name" class="form-control">
+              <option value="">Select Field Name</option>
+              <option value="field1">Field 1</option>
+              <option value="field2">Field 2</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="col-md-2">
+            <label for="from-date">From Date</label>
+            <input type="date" id="from-date" class="form-control" />
+          </div>
+          <div class="col-md-2">
+            <label for="to-date">To Date</label>
+            <input type="date" id="to-date" class="form-control" />
+          </div>
+        </div>
+        <div class="form-row" style="margin-top: 20px">
+          <div class="col-md-2">
+            <button id="search-btn" class="btn btn-primary btn-block">
+              Search
+            </button>
+          </div>
+          <div class="col-md-2">
+            <button id="export-csv-btn" class="btn btn-success btn-block">
+              Export CSV
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Graph Container -->
+      <div
+        id="soil-moisture-chart"
+        style="width: 100%; height: 400px; margin-top: 20px"
+      ></div>
+    </div>
+
+    <!-- Highcharts Configuration -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        Highcharts.chart("soil-moisture-chart", {
+          chart: {
+            type: "line",
+            backgroundColor: "#f9fafb", // Matches the page background
+          },
+          title: {
+            text: "Soil Moisture Levels",
+            style: {
+              color: "#1f4e3b",
+              fontWeight: "bold",
+            },
+          },
+          subtitle: {
+            text: "Monthly Sensor Data for Selected Field",
+            style: {
+              color: "#555",
+            },
+          },
+          xAxis: {
+            categories: [
+              "Jan",
+              "Feb",
+              "Mar",
+              "Apr",
+              "May",
+              "Jun",
+              "Jul",
+              "Aug",
+              "Sep",
+              "Oct",
+              "Nov",
+              "Dec",
+            ],
+            title: {
+              text: "Months",
+              style: {
+                color: "#1f4e3b",
+              },
+            },
+          },
+          yAxis: {
+            title: {
+              text: "Soil Moisture (%)",
+              style: {
+                color: "#1f4e3b",
+              },
+            },
+            labels: {
+              formatter: function () {
+                return this.value + "%";
+              },
+            },
+          },
+          tooltip: {
+            valueSuffix: "%",
+            backgroundColor: "#1f4e3b",
+            style: {
+              color: "#fff",
+            },
+          },
+          series: [
+            {
+              name: "Field A",
+              data: [65, 58, 72, 80, 76, 83, 69, 78, 81, 85, 60, 75],
+              color: "#1f4e3b",
+            },
+          ],
+          credits: {
+            enabled: false,
+          },
+        });
+      });
+
+      // Update graph dynamically based on selected filters (example)
+      function updateGraph() {
+        var region = document.getElementById("region").value;
+        var hotspot = document.getElementById("hotspot").value;
+        var aez = document.getElementById("aez").value;
+        var nap = document.getElementById("nap").value;
+
+        // Placeholder: You can update the graph data based on selected values here.
+        // For example, you might fetch new data based on selected filters.
+        console.log("Selected Region: " + region);
+        console.log("Selected Hotspot: " + hotspot);
+        console.log("Selected AEZ: " + aez);
+        console.log("Selected NAP: " + nap);
+
+        // Update chart based on selections (this is just a placeholder)
+        Highcharts.chart("soil-moisture-chart", {
+          chart: {
+            type: "line",
+            backgroundColor: "#f9fafb",
+          },
+          title: {
+            text: "Soil Moisture Levels - " + (region ? region : "All Regions"),
+            style: {
+              color: "#1f4e3b",
+              fontWeight: "bold",
+            },
+          },
+          subtitle: {
+            text: "Monthly Sensor Data for Selected Field",
+            style: {
+              color: "#555",
+            },
+          },
+          xAxis: {
+            categories: [
+              "Jan",
+              "Feb",
+              "Mar",
+              "Apr",
+              "May",
+              "Jun",
+              "Jul",
+              "Aug",
+              "Sep",
+              "Oct",
+              "Nov",
+              "Dec",
+            ],
+            title: {
+              text: "Months",
+              style: {
+                color: "#1f4e3b",
+              },
+            },
+          },
+          yAxis: {
+            title: {
+              text: "Soil Moisture (%)",
+              style: {
+                color: "#1f4e3b",
+              },
+            },
+            labels: {
+              formatter: function () {
+                return this.value + "%";
+              },
+            },
+          },
+          series: [
+            {
+              name: "Field A",
+              data: [65, 58, 72, 80, 76, 83, 69, 78, 81, 85, 60, 75], // Sample data, can be updated
+              color: "#1f4e3b",
+            },
+          ],
+          credits: {
+            enabled: false,
+          },
+        });
+      }
+
+      // Event listener for filter changes
+      document.querySelectorAll("select").forEach(function (select) {
+        select.addEventListener("change", updateGraph);
+      });
+
+
+      function refreshStatus() {
+        alert("Refreshing device status...");
+        // Add actual logic to fetch and update the status dynamically
+      }
+    </script>
+  </body>
+</html>

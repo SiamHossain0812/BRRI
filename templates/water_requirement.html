@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% load static %}
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* Global Styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Fira Sans", sans-serif;
+      }
+
+      body {
+        display: flex;
+        height: 100vh;
+        background-color: #f9fafb;
+        flex-direction: row;
+      }
+
+      /* Navbar */
+      .navbar {
+        height: 60px;
+        background: #1f4e3b;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 10;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .navbar h1 {
+        font-size: 20px;
+        font-weight: 600;
+        color: #ffffff;
+        margin: 0;
+        letter-spacing: 0.5px;
+      }
+
+      /* Main Content Area */
+      .main-content {
+        margin-left: 250px;
+        padding: 25px;
+        flex-grow: 1;
+        background-color: #f9fafb;
+        padding-top: 80px;
+      }
+
+      .main-content h2 {
+        font-size: 22px;
+        font-weight: 600;
+        margin-bottom: 15px;
+        line-height: 1.4;
+        color: #1f4e3b;
+      }
+
+      .main-content p {
+        font-size: 16px;
+        line-height: 1.6;
+        color: #555;
+      }
+
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: #f0f0f0;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: #10b981;
+        border-radius: 5px;
+        transition: background 0.3s ease;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: #1e8e3d;
+      }
+
+      /* Link Styling */
+      .menu-item a {
+        text-decoration: none;
+        color: inherit;
+        transition: color 0.3s ease;
+      }
+
+      /* Responsive Design */
+      @media (max-width: 1024px) {
+        .main-content {
+          margin-left: 230px;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .main-content {
+          margin-left: 200px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <div class="navbar">
+      <h1>Intelligent Irrigation and Nutrient Management System</h1>
+    </div>
+
+    <!-- Sidebar -->
+    {% include 'sidebar.html' %}
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <h2>
+        Welcome to the Intelligent Irrigation and Nutrient Management System
+        Dashboard
+      </h2>
+      <p>
+        This is where you can manage all your irrigation and nutrient
+        requirements.
+      </p>
+
+      <!-- Card with the fields -->
+      <div style="margin-top: 40px">
+        <div
+          class="card shadow-sm"
+          style="
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+          "
+        >
+          <div class="card-header bg-dark text-white">
+            <h5 class="card-title mb-0">Irrigation Field Information</h5>
+          </div>
+          <div class="card-body">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Serial</th>
+                  <th>Field</th>
+                  <th>Device ID</th>
+                  <th>Date</th>
+                  <th>Water Requirement (mm)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>Field A</td>
+                  <td>Device 101</td>
+                  <td>2024-12-01</td>
+                  <td>15</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>Field B</td>
+                  <td>Device 102</td>
+                  <td>2024-12-02</td>
+                  <td>20</td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td>Field C</td>
+                  <td>Device 103</td>
+                  <td>2024-12-03</td>
+                  <td>18</td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td>Field D</td>
+                  <td>Device 104</td>
+                  <td>2024-12-04</td>
+                  <td>22</td>
+                </tr>
+                <tr>
+                  <td>5</td>
+                  <td>Field E</td>
+                  <td>Device 105</td>
+                  <td>2024-12-05</td>
+                  <td>17</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap and JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+      function refreshStatus() {
+        alert("Refreshing device status...");
+        // Add actual logic to fetch and update the status dynamically
+      }
+    </script>
+  </body>
+</html>

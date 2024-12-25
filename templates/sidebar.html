@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sidebar Example</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Fira Sans", sans-serif;
+        }
+
+        body {
+            display: flex;
+            height: 100vh;
+            background-color: #f9fafb;
+            flex-direction: row;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background: #ffffff;
+            color: #1f4e3b;
+            padding: 20px;
+            box-shadow: 4px 0 6px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            z-index: 10;
+            overflow-y: auto;
+        }
+
+        /* Logo Section */
+        .sidebar .logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        .sidebar .logo img {
+            width: 50px;
+            margin-right: 15px;
+            border-radius: 50%;
+        }
+
+        .sidebar h2 {
+            font-size: 22px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        /* Menu */
+        .menu-item {
+            margin-bottom: 15px;
+        }
+
+        .menu-item > button {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            background: #f3f4f6;
+            color: #1f4e3b;
+            border: none;
+            padding: 14px 20px;
+            font-size: 15px;
+            font-weight: 500;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu-item > button:hover {
+            background: #1f4e3b;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .menu-item > button.active {
+            background: #1f4e3b;
+            color: white;
+        }
+
+        .menu-item > button i {
+            margin-right: 10px;
+        }
+
+        /* Submenu */
+        .menu-item > ul {
+            list-style: none;
+            margin-top: 8px;
+            padding-left: 15px;
+            max-height: 0;
+            overflow: hidden;
+            background: #f9fafb;
+            border-radius: 6px;
+            transition: max-height 0.4s ease, padding 0.4s ease;
+        }
+
+        .menu-item > ul.open {
+            max-height: 300px;
+            padding: 8px 0;
+        }
+
+        .menu-item > ul li {
+            padding: 8px 15px;
+            font-size: 14px;
+            color: #374151;
+            cursor: pointer;
+            border-bottom: 1px solid #e5e7eb;
+            transition: background 0.3s ease;
+        }
+
+        .menu-item > ul li:last-child {
+            border-bottom: none;
+        }
+
+        .menu-item > ul li:hover {
+            background: #1f4e3b;
+            color: white;
+        }
+
+        /* Content styling */
+        .content {
+            margin-left: 250px;
+            padding: 20px;
+            flex-grow: 1;
+            background-color: #f9fafb;
+            padding-top: 80px;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f0f0f0;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #10b981;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #1e8e3d;
+        }
+
+        /* Link Styling */
+        .menu-item a {
+            text-decoration: none;
+            color: inherit;
+            transition: color 0.3s ease;
+        }
+
+        .menu-item > button a {
+            text-decoration: none;
+            color: inherit;
+            transition: color 0.3s ease;
+        }
+
+        .menu-item > button a:hover {
+            color: white; /* Change link color to white on hover */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <img src="{% static 'images/brri.png' %}" alt="Logo" />
+            <h2>IINMS</h2>
+        </div>
+        <div class="menu">
+            <!-- Dashboard -->
+            <div class="menu-item">
+                <button onclick="toggleMenu(this)" class="{% if request.path == '/' %}active{% endif %}">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <a href="/">Dashboard</a>
+                </button>
+            </div>
+    
+            <!-- Registration -->
+            <div class="menu-item">
+                <button onclick="toggleMenu(this)" class="{% if 'registration' in request.path %}active{% endif %}">
+                    <i class="fas fa-clipboard-list"></i> Registration <span>+</span>
+                </button>
+                <ul class="submenu">
+                    <li><a href="/admin-registration">Admin Registration</a></li>
+                    <li><a href="/uao-registration">UAO Registration</a></li>
+                    <li><a href="/saao-registration">SAAO Registration</a></li>
+                    <li><a href="/farmer-registration">Farmer Registration</a></li>
+                </ul>
+            </div>
+    
+            <!-- Water Level Visualization -->
+            <div class="menu-item">
+                <button onclick="toggleMenu(this)" class="{% if 'water-level' in request.path %}active{% endif %}">
+                    <i class="fas fa-water"></i> Water Level Visualization <span>+</span>
+                </button>
+                <ul class="submenu">
+                    <li><a href="/potentiometer-data">Potentiometer</a></li>
+                    <li><a href="/laser-data">Laser</a></li>
+                    <li><a href="/sonar-data">Ultra Sound</a></li>
+                </ul>
+            </div>
+    
+            <!-- Weather Forecast -->
+            <div class="menu-item">
+                <button class="{% if 'weather-forecast' in request.path %}active{% endif %}">
+                    <i class="fas fa-cloud-sun"></i>
+                    <a href="#">Weather Forecast</a>
+                </button>
+            </div>
+    
+            <!-- Crop-Nutrient Requirement -->
+            <div class="menu-item">
+                <button onclick="toggleMenu(this)" class="{% if 'crop-nutrient' in request.path %}active{% endif %}">
+                    <i class="fas fa-palette"></i> Crop-Nutrient Requirement <span>+</span>
+                </button>
+                <ul class="submenu">
+                    <li><a href="#">Nitrogen</a></li>
+                    <li><a href="#">Potassium</a></li>
+                    <li><a href="#">Phosphorus</a></li>
+                    <li><a href="#">Zinc</a></li>
+                    <li><a href="#">Sulfur</a></li>
+                    <li><a href="#">Boron</a></li>
+                </ul>
+            </div>
+    
+            <!-- Soil Temperature and pH -->
+            <div class="menu-item">
+                <button class="{% if 'soil-temperature' in request.path %}active{% endif %}">
+                    <i class="fas fa-thermometer-half"></i>
+                    <a href="#">Soil Temperature and pH</a>
+                </button>
+            </div>
+    
+            <!-- Pump Control -->
+            <div class="menu-item">
+                <button class="{% if 'pump-control' in request.path %}active{% endif %}">
+                    <i class="fas fa-pump-soap"></i>
+                    <a href="#">Pump Control</a>
+                </button>
+            </div>
+    
+            <!-- Archive -->
+            <div class="menu-item">
+                <button class="{% if 'archive' in request.path %}active{% endif %}">
+                    <i class="fas fa-archive"></i>
+                    <a href="#">Archive</a>
+                </button>
+            </div>
+    
+            <!-- Crop Water Requirement -->
+            <div class="menu-item">
+                <button class="{% if 'crop-water' in request.path %}active{% endif %}">
+                    <i class="fas fa-tasks"></i>
+                    <a href="/irrigation-status">Crop Water Requirement</a>
+                </button>
+            </div>
+    
+            <!-- List of Technology Users -->
+            <div class="menu-item">
+                <button onclick="toggleMenu(this)" class="{% if 'user-list' in request.path %}active{% endif %}">
+                    <i class="fas fa-users"></i> List of Technology Users <span>+</span>
+                </button>
+                <ul class="submenu">
+                    <li><a href="#">Admin</a></li>
+                    <li><a href="#">UAO/AEO</a></li>
+                    <li><a href="#">SAAO</a></li>
+                    <li><a href="#">Farmer</a></li>
+                </ul>
+            </div>
+    
+            <!-- Feedback -->
+            <div class="menu-item">
+                <button onclick="toggleMenu(this)" class="{% if 'feedback' in request.path %}active{% endif %}">
+                    <i class="fas fa-comments"></i> Feedback <span>+</span>
+                </button>
+                <ul class="submenu">
+                    <li><a href="/send-feedback">Send</a></li>
+                    <li><a href="/user-feedbacks">User Feedbacks</a></li>
+                </ul>
+            </div>
+    
+            <!-- About -->
+            <div class="menu-item">
+                <button class="{% if 'about' in request.path %}active{% endif %}">
+                    <i class="fas fa-info-circle"></i>
+                    <a href="#">About</a>
+                </button>
+            </div>
+    
+            <!-- Role Management -->
+            <div class="menu-item">
+                <button onclick="toggleMenu(this)" class="{% if 'role' in request.path %}active{% endif %}">
+                    <i class="fas fa-cogs"></i> Role <span>+</span>
+                </button>
+                <ul class="submenu">
+                    <li><a href="#">Super Admin</a></li>
+                    <li><a href="#">Admin</a></li>
+                    <li><a href="#">UAO</a></li>
+                    <li><a href="#">SAAO</a></li>
+                    <li><a href="#">Farmer</a></li>
+                </ul>
+            </div>
+    
+            <!-- Settings -->
+            <div class="menu-item">
+                <button class="{% if 'settings' in request.path %}active{% endif %}">
+                    <i class="fas fa-cogs"></i>
+                    <a href="#">Settings</a>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle collapsible menu
+        function toggleMenu(button) {
+            // Get the next sibling element (submenu)
+            var submenu = button.nextElementSibling;
+            submenu.classList.toggle('open');
+            // Toggle the active state of the button
+            button.classList.toggle('active');
+        }
+
+        // Auto-toggle active state for main page links after loading
+        document.addEventListener('DOMContentLoaded', function () {
+            // Ensure active state on initial page load
+            var path = window.location.pathname;
+            var menuItems = document.querySelectorAll('.menu-item button');
+            menuItems.forEach(function (item) {
+                var link = item.querySelector('a');
+                if (link && path.includes(link.getAttribute('href'))) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

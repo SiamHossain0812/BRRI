@@ -1,0 +1,223 @@
+from datetime import datetime, timedelta
+from django.http import JsonResponse
+from django.shortcuts import redirect, render
+from .models import SensorData
+
+from datetime import timedelta
+from django.http import JsonResponse
+from django.shortcuts import redirect, render
+from admin_dashboard.models import UserInfo
+from .models import SensorData
+
+from django.db import connection
+from django.shortcuts import render, redirect
+
+def dashboard(request):
+    """
+    View for rendering the dashboard page with recent data from the user's dynamic table.
+    """
+    # Check if the user is logged in (i.e., session has a gateway_id)
+    if 'gateway_id' not in request.session:
+        return redirect('login')  # If not logged in, redirect to the login page
+
+    # Retrieve the user's gateway_id from the session
+    gateway_id = request.session.get('gateway_id')
+    table_name = f"gwid_{gateway_id}"
+
+    # Fetch recent data from the dynamic table
+    query = f"SELECT * FROM {table_name} ORDER BY timestamp DESC LIMIT 1"
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(query)
+            result = cursor.fetchone()
+
+        if result:
+            # Assuming the table has these columns: id, timestamp, temperature, soil_moisture, water_level
+            recent_data = {
+                'id': result[1],
+                'timestamp': result[2],
+                'temperature': result[3],
+                'soil_moisture': result[4],
+                'water_level': result[5],
+            }
+        else:
+            recent_data = None
+    except Exception as e:
+        recent_data = None  # Handle database errors gracefully
+
+    # Render the dashboard template with the recent data
+    return render(request, 'dashboard.html', {
+        'recent_temperature': recent_data['temperature'] if recent_data else 'N/A',
+        'recent_soil_moisture': recent_data['soil_moisture'] if recent_data else 'N/A',
+        'recent_water_level': recent_data['water_level'] if recent_data else 'N/A',
+    })
+
+
+
+from django.http import JsonResponse
+from django.db import connection
+
+def recent_data(request):
+    """
+    View for returning recent sensor data in JSON format from the user's dynamic table.
+    """
+    if 'gateway_id' not in request.session:
+        return JsonResponse({'error': 'User not logged in'}, status=403)
+
+    # Retrieve the user's gateway_id from the session
+    gateway_id = request.session.get('gateway_id')
+    table_name = f"gwid_{gateway_id}"
+
+    query = f"SELECT * FROM {table_name} ORDER BY timestamp DESC LIMIT 1"
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute(query)
+            result = cursor.fetchone()
+
+        if result:
+            recent_data = {
+                'timestamp': result[2].strftime('%Y-%m-%d %H:%M:%S'),
+                'temperature': result[3],
+                'soil_moisture': result[4],
+                'water_level': result[5],
+            }
+        else:
+            recent_data = {
+                'temperature': 'N/A',
+                'soil_moisture': 'N/A',
+                'water_level': 'N/A',
+            }
+        return JsonResponse(recent_data)
+    except Exception as e:
+        return JsonResponse({'error': 'Database error', 'details': str(e)}, status=500)
+
+
+
+from django.http import JsonResponse
+from datetime import datetime, timedelta
+from django.db import connection
+
+def chart_data(request):
+    """
+    View to return sensor data for charts (temperature, soil moisture, water level).
+    Optionally filter by start and end dates.
+    """
+    # Check if the gateway_id is in the session
+    if 'gateway_id' not in request.session:
+        return JsonResponse({'error': 'User not logged in'}, status=403)
+
+    # Retrieve the gateway_id from session
+    gateway_id = request.session.get('gateway_id')
+
+    # Ensure the gateway_id is an integer
+    try:
+        gateway_id = int(gateway_id)
+    except ValueError:
+        return JsonResponse({'error': 'Invalid gateway_id'}, status=400)
+
+    # Build table name dynamically using the gateway_id
+    table_name = f"gwid_{gateway_id}"
+
+    # Get start and end date from request (if any)
+    start_date = request.GET.get('start_date')
+    end_date = request.GET.get('end_date')
+
+    try:
+        if start_date and end_date:
+            # Convert dates to datetime objects, add time to end_date to include the full day
+            start_datetime = datetime.strptime(start_date, '%Y-%m-%d')
+            end_datetime = datetime.strptime(end_date, '%Y-%m-%d') + timedelta(days=1)
+        else:
+            # If no date range is selected, fetch the most recent timestamp from the database
+            query = f"""
+                SELECT timestamp 
+                FROM {table_name} 
+                ORDER BY timestamp DESC LIMIT 1
+            """
+            with connection.cursor() as cursor:
+                cursor.execute(query)
+                result = cursor.fetchone()
+
+            if result:
+                # Get the most recent timestamp
+                most_recent_timestamp = result[0]
+                # Calculate the time range: from most recent timestamp to the previous 24 hours
+                end_datetime = most_recent_timestamp
+                start_datetime = end_datetime - timedelta(days=1)
+            else:
+                # If no data found, return an empty response or an error
+                return JsonResponse({'error': 'No data found for the gateway'}, status=404)
+
+        # Debugging: Print the query and date range being used
+        print(f"Start date: {start_datetime}, End date: {end_datetime}")
+
+        # Query to fetch the sensor data from the dynamically named table
+        query = f"""
+            SELECT timestamp, temperature, soil_moisture, water_level 
+            FROM {table_name} 
+            WHERE timestamp >= %s AND timestamp < %s 
+            ORDER BY timestamp ASC
+        """
+
+        with connection.cursor() as cursor:
+            cursor.execute(query, [start_datetime, end_datetime])
+            results = cursor.fetchall()
+
+        # Debugging: Print the fetched results to check if data is being returned
+        print(f"Query results: {results}")
+
+        # Prepare data to be returned in the response
+        timestamps = [row[0].strftime('%Y-%m-%d %H:%M:%S') for row in results]
+        temperatures = [row[1] for row in results]
+        soil_moistures = [row[2] for row in results]
+        water_levels = [row[3] for row in results]
+
+        # Return the data as JSON response
+        return JsonResponse({
+            'timestamps': timestamps,
+            'temperatures': temperatures,
+            'soil_moistures': soil_moistures,
+            'water_levels': water_levels,
+        })
+
+    except Exception as e:
+        return JsonResponse({'error': 'Database error', 'details': str(e)}, status=500)
+
+
+
+
+
+
+
+
+from django.shortcuts import redirect, render
+from admin_dashboard.models import UserInfo
+
+from django.shortcuts import render, redirect
+from django.http import JsonResponse
+from admin_dashboard.models import UserInfo  # Import your custom UserInfo model
+
+def login_view(request):
+    if request.method == 'POST':
+        user_id = request.POST.get('username')  # 'username' is the 'user_id' in the form
+        password = request.POST.get('password')
+
+        # Check if the user exists in UserInfo table
+        try:
+            user = UserInfo.objects.get(user_id=user_id)
+            
+            # If the password matches
+            if user.password == password:
+                # Assuming 'gateway_id' is a field of the UserInfo model
+                request.session['gateway_id'] = user.gateway_id  # Store the user's gateway_id
+                return redirect('dashboard')  # Redirect to the dashboard page after successful login
+            else:
+                return JsonResponse({'error': 'Invalid credentials'}, status=401)
+        except UserInfo.DoesNotExist:
+            return JsonResponse({'error': 'Invalid credentials'}, status=401)
+        
+    else:
+        return render(request, 'user_login.html')  # Render login form
+
+
+

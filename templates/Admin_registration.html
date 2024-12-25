@@ -1,0 +1,475 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% load static %}
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Registration</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* Global Styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Fira Sans", sans-serif;
+      }
+
+      body {
+        display: flex;
+        height: 100vh;
+        background-color: #f9fafb;
+        flex-direction: row;
+      }
+
+      /* Navbar */
+      .navbar {
+        height: 60px;
+        background: #1f4e3b;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 10;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .navbar h1 {
+        font-size: 20px;
+        font-weight: 600;
+        color: #ffffff;
+        margin: 0;
+        letter-spacing: 0.5px;
+      }
+
+      /* Main Content Area */
+      .main-content {
+        margin-left: 250px;
+        padding: 25px;
+        flex-grow: 1;
+        background-color: #f9fafb;
+        padding-top: 80px;
+      }
+
+      .main-content h2 {
+        font-size: 22px;
+        font-weight: 600;
+        margin-bottom: 15px;
+        line-height: 1.4;
+        color: #1f4e3b;
+      }
+
+      .main-content p {
+        font-size: 16px;
+        line-height: 1.6;
+        color: #555;
+      }
+
+      /* Custom Scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: #f0f0f0;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: #10b981;
+        border-radius: 5px;
+        transition: background 0.3s ease;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: #1e8e3d;
+      }
+
+      /* Link Styling */
+      .menu-item a {
+        text-decoration: none;
+        color: inherit;
+        transition: color 0.3s ease;
+      }
+
+      /* Responsive Design */
+      @media (max-width: 1024px) {
+        .main-content {
+          margin-left: 230px;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .main-content {
+          margin-left: 200px;
+        }
+      }
+
+      /* Section Titles */
+      .main-content h2 {
+        font-size: 24px; /* Reduced font size */
+        font-weight: 600;
+        margin-bottom: 15px; /* Reduced bottom margin */
+        line-height: 1.4;
+        color: #1f4e3b;
+      }
+
+      /* Form Section Styling */
+      .form-section {
+        background-color: #ffffff;
+        padding: 15px; /* Reduced padding */
+        border-radius: 8px; /* Slightly reduced border-radius */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px; /* Reduced margin-bottom */
+      }
+
+      /* Form Section Header */
+      .form-section h3 {
+        font-size: 20px; /* Slightly smaller font size */
+        font-weight: 600;
+        color: #1f4e3b;
+        margin-bottom: 10px; /* Reduced bottom margin */
+      }
+
+      /* Form Input Fields */
+      .form-section .form-control {
+        border-radius: 6px; /* Reduced border-radius */
+        border: 1px solid #d1d5db;
+        padding: 8px 12px; /* Reduced padding */
+        font-size: 14px; /* Reduced font size */
+        transition: border-color 0.3s ease;
+      }
+
+      .form-section .form-control:focus {
+        border-color: #1f4e3b;
+        box-shadow: 0 0 5px rgba(31, 78, 59, 0.2);
+      }
+
+      /* Form Row */
+      .form-section .row {
+        margin-bottom: 15px; /* Reduced row margin */
+      }
+
+      /* Form Column Styling */
+      .form-section .col-md-6 {
+        padding-bottom: 10px; /* Reduced padding-bottom */
+      }
+
+      /* Submit Button Styling */
+      .btn-primary {
+        background-color: #1f4e3b;
+        border-color: #1f4e3b;
+        padding: 10px 20px; /* Reduced padding */
+        font-size: 14px; /* Reduced font size */
+        border-radius: 5px; /* Slightly reduced border-radius */
+        transition: background-color 0.3s ease, transform 0.3s ease;
+      }
+
+      .btn-primary:hover {
+        background-color: #155c3b;
+        border-color: #155c3b;
+        transform: scale(1.05);
+      }
+
+      .clicked {
+        background-color: #155c3b;
+        border-color: #155c3b;
+        transform: scale(1.05);
+        color: #ffffff;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <div class="navbar">
+      <h1>Intelligent Irrigation and Nutrient Management System</h1>
+    </div>
+
+    <!-- Sidebar -->
+    {% include 'sidebar.html' %}
+
+    <div class="main-content">
+      <!-- Display Success/Error Messages -->
+      {% if messages %}
+      <div class="alert-container">
+        {% for message in messages %} {% if message.tags == 'success' %}
+        <div
+          id="successMessage"
+          class="alert alert-{{ message.tags }}"
+          role="alert"
+        >
+          {{ message }}
+        </div>
+        {% else %}
+        <div class="alert alert-{{ message.tags }}" role="alert">
+          {{ message }}
+        </div>
+        {% endif %} {% endfor %}
+      </div>
+      {% endif %}
+
+      <form method="post" action="/admin-registration/">
+        {% csrf_token %}
+
+        <!-- Personal Information Section -->
+        <div class="form-section">
+          <h3>Personal Information</h3>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="name">Admin Name</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="father_name">Father's Name</label>
+              <input
+                type="text"
+                id="father_name"
+                name="father_name"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="gender">Gender</label>
+              <input
+                type="text"
+                id="gender"
+                name="gender"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="age">Age</label>
+              <input
+                type="number"
+                id="age"
+                name="age"
+                class="form-control"
+                required
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Location & Division Details Section -->
+        <div class="form-section">
+          <h3>Location & Division Details</h3>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="latitude">Latitude</label>
+              <input
+                type="number"
+                id="latitude"
+                name="latitude"
+                class="form-control"
+                required
+                step="any"
+              />
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="longitude">Longitude</label>
+              <input
+                type="number"
+                id="longitude"
+                name="longitude"
+                class="form-control"
+                required
+                step="any"
+              />
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="division">Division</label>
+              <input
+                type="text"
+                id="division"
+                name="division"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="district">District</label>
+              <input
+                type="text"
+                id="district"
+                name="district"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="upazila">Upazila</label>
+              <input
+                type="text"
+                id="upazila"
+                name="upazila"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="region">Region</label>
+              <input
+                type="text"
+                id="region"
+                name="region"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="aez">AEZ</label>
+              <input
+                type="text"
+                id="aez"
+                name="aez"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="hotspot">Hotspot</label>
+              <input
+                type="text"
+                id="hotspot"
+                name="hotspot"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="risk_area">RISK Area (NAP)</label>
+              <input
+                type="text"
+                id="risk_area"
+                name="risk_area"
+                class="form-control"
+                required
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Contact Information & Miscellaneous Section -->
+        <div class="form-section">
+          <h3>Contact Information & Miscellaneous</h3>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="nid">NID</label>
+              <input
+                type="text"
+                id="nid"
+                name="nid"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="personal_phone">Personal Phone</label>
+              <input
+                type="tel"
+                id="personal_phone"
+                name="personal_phone"
+                class="form-control"
+                required
+                pattern="[0-9]{10,15}"
+                title="Enter a valid phone number"
+              />
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="official_phone">Official Phone</label>
+              <input
+                type="tel"
+                id="official_phone"
+                name="official_phone"
+                class="form-control"
+                required
+                pattern="[0-9]{10,15}"
+                title="Enter a valid phone number"
+              />
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="whatsapp_number">Whatsapp Number</label>
+              <input
+                type="tel"
+                id="whatsapp_number"
+                name="whatsapp_number"
+                class="form-control"
+                required
+                pattern="[0-9]{10,15}"
+                title="Enter a valid phone number"
+              />
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="facebook_id">Facebook ID</label>
+              <input
+                type="text"
+                id="facebook_id"
+                name="facebook_id"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="official_email">Official Email</label>
+              <input
+                type="email"
+                id="official_email"
+                name="official_email"
+                class="form-control"
+                required
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="form-section text-center">
+          <button type="submit" class="btn btn-primary" name="submit">
+            Submit
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Bootstrap and JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        setTimeout(function () {
+          const successMessage = document.getElementById("successMessage");
+          if (successMessage) {
+            successMessage.style.display = "none";
+          }
+        }, 5000); // 5000ms = 5 seconds
+      });
+    </script>
+  </body>
+</html>
